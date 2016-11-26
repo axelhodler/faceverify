@@ -85,10 +85,10 @@ def verify_participation(eventId):
     return add_preflight_headers(resp)
   img_src = extract_base64_encoded_image(request)
   match = participants_match(img_src, fetch_participant())
-  resp = Response(False)
+  resp = Response("false")
   if match:
     refund_deposit()
-    resp = Response(True)
+    resp = Response("true")
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
 
