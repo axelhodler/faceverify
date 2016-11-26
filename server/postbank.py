@@ -7,7 +7,7 @@ USERNAME=os.environ['POSTBANK_USERNAME']
 PASSWORD=os.environ['POSTBANK_PASSWORD']
 USERNAME_ORGA=os.environ['POSTBANK_ORGA_USERNAME']
 
-COST=10
+COST=str(10)
 
 def get_token(username):
   headers= {
