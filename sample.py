@@ -1,7 +1,8 @@
 import cognitive_face as CF
 import base64
+import os
 
-KEY = '0f4b97a384544170ac4b30161f48daa1'  # Replace with a valid Subscription Key here.
+KEY = os.environ['FACE_API_KEY']
 CF.Key.set(KEY)
 
 def fetch_faceid(image_url):
