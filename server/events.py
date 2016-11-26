@@ -71,6 +71,7 @@ def cancel_event(eventId):
           }
   data = '{"registered": false}'
   resp = Response(requests.put(EVENTS_URL + '/' + eventId + '?patch=true', headers=headers, data=data).text)
+  refund_deposit()
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
 
@@ -78,11 +79,14 @@ def extract_base64_encoded_image(request):
   return str(json.loads(request.data)['image'])
 
 @app.route('/events/<eventId>/verify', methods=['POST', 'OPTIONS'])
-def verify_participation():
+def verify_participation(eventId):
+  resp = Response("")
+  if request.method == 'OPTIONS':
+    return add_preflight_headers(resp)
   img_src = extract_base64_encoded_image(request)
-  participants_match = participants_match(img_src, fetch_participant())
+  match = participants_match(img_src, fetch_participant())
   resp = Response(False)
-  if participants_match:
+  if match:
     refund_deposit()
     resp = Response(True)
   resp.headers['Access-Control-Allow-Origin'] = '*'
