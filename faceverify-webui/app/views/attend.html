@@ -1,0 +1,24 @@
+<h3>Verify Your Attendance</h3>
+
+<div class="col-md-12 text-center" ng-show="verifystatus === undefined">
+    <ng-webcam config="vm.config"
+    on-error="vm.onError(err)"
+    on-live="vm.onLive()"
+    on-capture-complete="vm.onCaptureComplete(src)"></ng-webcam>
+    <button class="btn btn-primary" type="button" ng-hide="!vm.captureButtonEnable" ng-click="vm.capture()">It's Me!</button>
+</div>
+<div class="jumbotron" ng-show="verifystatus === 'verified'">
+    <h1>Awesome!</h1>
+    <p class="lead">
+        Your Attendance was successfully verified and the deposit transferred back to your account.
+    </p>
+    <p><a class="btn btn-lg btn-success" ng-click="startAgain()">Perform Another Verification</a></p>
+</div>
+<div class="jumbotron" ng-show="verifystatus === 'failed'">
+    <h1>Oops, that went wrong</h1>
+    <p class="alert alert-danger">
+        Your Attendance was not verified, please make sure your face and location are correct.
+    </p>
+    <p><a class="btn btn-lg btn-danger" ng-click="startAgain()">Try Again</a></p>
+</div>
+</div>
