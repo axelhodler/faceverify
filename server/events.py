@@ -13,6 +13,11 @@ YAAS_SECRET  = os.environ['YAAS_SECRET']
 # global event url
 EVENTS_URL = 'https://api.beta.yaas.io/hybris/document/v1/verifyface/verifyface.verify/data/events'
 
+def add_preflight_headers(resp):
+  resp.headers['Access-Control-Allow-Origin'] = '*'
+  resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+  return resp
+
 def get_yaas_token():
   tokenurl = 'https://api.beta.yaas.io/hybris/oauth2/v1/token'
   headers = {
@@ -85,14 +90,12 @@ def verify_participation():
 
 @app.route('/users', methods=['POST', 'OPTIONS'])
 def register_user():
+  resp = Response("")
   if request.method == 'OPTIONS':
-    resp = Response("")
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-    return resp
+    return add_preflight_headers(resp)
   img_src = extract_base64_encoded_image(request)
   add_participant(img_src)
-  return ""
+  return add_preflight_headers(resp)
 
 if __name__ == "__main__":
   app.run()
