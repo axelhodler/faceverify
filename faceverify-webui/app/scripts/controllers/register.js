@@ -1,41 +1,50 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name faceverifyWebuiApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the faceverifyWebuiApp
- */
 angular.module('faceverifyApp')
-  .controller('RegisterCtrl', ['$rootScope', '$scope', function ($rootScope, $scope) {
+  .controller('RegisterCtrl', ['$rootScope', '$scope', '$http', '$log', 'ConfigService', function ($rootScope, $scope, $http, $log, ConfigService) {
     $rootScope.active = 'register';
+    $scope.loading = true;
 
-    $scope.events = [
-        {
-            name: 'Startup Founders Get Together',
-            location: 'Coworking 0711',
-            date: '2016-12-13',
-            start: '18:30',
-            end: '21:00',
-            deposit: 10.00
-        },
-        {
-            name: '7th Stuttgart Ethereum, blockchain technology, decentralized computing meetup',
-            location: 'bwcon: Geschäftsstelle, 5.Stock, Besprechungsraum',
-            date: '2016-12-20',
-            start: '19:00',
-            end: '21:00',
-            deposit: 5.00
-        }
-    ];
+    $http.get(ConfigService.apihost + '/events').then(function (response) {
+      $scope.loading = false;
+      $scope.events = [];
+      response.data.forEach(function (event) {
+        console.log(event);
+        $scope.events.push(event);
+      });
+    }, function (response) {
+      $log.log(response);
+      $scope.loading = false;
+    });
 
     $scope.register = function(event) {
-        event.registered = true;
+        $scope.saving = true;
+        event.saving = true;
+        $http.post(ConfigService.apihost + '/events/' + event.id + '/book')
+          .then(function () {
+            event.registered = true;
+            $scope.saving = false;
+            event.saving = false;
+          }, function (response) {
+            $log.log(response);
+            $scope.saving = false;
+            event.saving = false;
+          });
     };
 
     $scope.calloff = function(event) {
+        $scope.saving = true;
+        event.saving = true;
+        $http.post(ConfigService.apihost + '/events/' + event.id + '/cancel')
+          .then(function () {
             event.registered = false;
+            event.saving = false;
+            $scope.saving = false;
+          }, function (response) {
+            $log.log(response);
+            $scope.saving = false;
+            event.saving = false;
+          });
         };
 
   }]);

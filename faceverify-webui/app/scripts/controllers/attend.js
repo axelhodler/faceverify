@@ -1,15 +1,20 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name faceverifyWebuiApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the faceverifyWebuiApp
- */
 angular.module('faceverifyApp')
-  .controller('AttendCtrl', ['$rootScope', '$scope', function ($rootScope, $scope) {
+  .controller('AttendCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$log', 'ConfigService', function ($rootScope, $scope, $http, $routeParams, $log, ConfigService) {
     $rootScope.active = 'attend';
+    $scope.eventid = $routeParams.eventid;
+    $scope.loading = true;
+
+    $http.get(ConfigService.apihost + '/events/' + $scope.eventid)
+        .then(function (response) {
+          $log.log(response.data);
+          $scope.event = response.data;
+          $scope.loading = false;
+        }, function (response) {
+          $log.log(response);
+          $scope.loading = false;
+        });
 
     $scope.vm = {};
     $scope.vm.config = {

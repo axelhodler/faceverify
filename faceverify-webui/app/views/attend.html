@@ -1,6 +1,14 @@
 <h3>Verify Your Attendance</h3>
+<p class="text-center" ng-if="loading"><span class="glyphicon glyphicon-refresh gly-spin"></span> Loading Event...</p>
 
-<div class="col-md-12 text-center" ng-show="verifystatus === undefined">
+<div ng-if="event !== undefined">
+  <h4>{{ event.name }}</h4>
+  <p>Location: {{ event.location }}</p>
+  <p>{{ event.date }} from {{ event.start }} to {{ event.end }}</p>
+  <p>Organized by {{ event.organizer }}</p>
+</div>
+
+<div class="col-md-12 text-center" ng-show="verifystatus === undefined && !loading">
     <ng-webcam config="vm.config"
     on-error="vm.onError(err)"
     on-live="vm.onLive()"

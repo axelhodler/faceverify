@@ -1,18 +1,10 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name faceverifyWebuiApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the faceverifyWebuiApp
- */
 angular.module('faceverifyApp')
   .controller('SignupCtrl', ['$rootScope', '$scope', '$log', function ($rootScope, $scope, $log) {
     $rootScope.active = 'signup';
     $scope.mode = 'currentpicture';
 
-    /* jshint validthis: true */
     $scope.vm = {};
     $scope.vm.config = {
       delay: 2,

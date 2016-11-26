@@ -30,14 +30,19 @@ angular
         controller: 'SignupCtrl'
       })
       .when('/register', {
-          templateUrl: 'views/register.html',
-          controller: 'RegisterCtrl'
-        })
-    .when('/attend', {
-              templateUrl: 'views/attend.html',
-              controller: 'AttendCtrl'
-            })
+        templateUrl: 'views/register.html',
+        controller: 'RegisterCtrl'
+      })
+      .when('/attend/:eventid', {
+        templateUrl: 'views/attend.html',
+        controller: 'AttendCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
+  })
+  .factory('ConfigService', function() {
+    return {
+        apihost: 'http://localhost:5000'
+    };
   });

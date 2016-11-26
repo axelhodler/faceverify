@@ -1,5 +1,5 @@
 <h3>Register for Events</h3>
-
+<p class="text-center" ng-if="loading"><span class="glyphicon glyphicon-refresh gly-spin"></span> Loading Events...</p>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -8,6 +8,7 @@
       <td>End</td>
       <td>Name</td>
       <td>Location</td>
+      <td>Organizer</td>
       <td>Deposit</td>
       <td>Status</td>
       <td></td>
@@ -20,14 +21,20 @@
       <td>{{ event.end }}</td>
       <td>{{ event.name }}</td>
       <td>{{ event.location }}</td>
+      <td>{{ event.organizer }}</td>
       <td>{{ event.deposit.toFixed(2) }} EUR</td>
       <td>
-        <span ng-if="event.registered" class="glyphicon glyphicon-ok"></span>
-        <span ng-if="!event.registered" class="glyphicon glyphicon-remove"></span>
+        <span class="text-success" ng-if="event.registered"><span class="glyphicon glyphicon-ok"></span> Going</span>
+        <span class="text-warning" ng-if="!event.registered"><span class="glyphicon glyphicon-remove"></span> Not going</span>
       </td>
       <td>
-        <button ng-show="event.registered" class="btn btn-sm btn-danger" type="button" ng-click="calloff(event)">Call Off</button>
-        <button ng-show="!event.registered" class="btn btn-sm btn-primary" type="button" ng-click="register(event)">Register</button>
+        {{ event.saving }}
+        <button ng-show="event.registered" class="btn btn-sm btn-warning" type="button" ng-click="calloff(event)" ng-disabled="saving">
+          Cancel
+        </button>
+        <button ng-show="!event.registered" class="btn btn-sm btn-primary" type="button" ng-click="register(event)" ng-disabled="saving">
+          Book
+        </button>
       </td>
     </tr>
   </tbody>
