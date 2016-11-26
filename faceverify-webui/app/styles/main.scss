@@ -1,7 +1,12 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$brand-primary: #0086b3;
+$border-radius-base:        0px;
+$border-radius-large:       0px;
+$border-radius-small:       0px;
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
+
 
 .browsehappy {
   margin: 0.2em 0;
@@ -91,10 +96,10 @@ body {
 }
 
 .gly-spin {
-  -webkit-animation: spin 2s infinite linear;
-  -moz-animation: spin 2s infinite linear;
-  -o-animation: spin 2s infinite linear;
-  animation: spin 2s infinite linear;
+  -webkit-animation: spin .7s infinite linear;
+  -moz-animation: spin .7s infinite linear;
+  -o-animation: spin .7s infinite linear;
+  animation: spin .7s infinite linear;
 }
 @-moz-keyframes spin {
   0% {

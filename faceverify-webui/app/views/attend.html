@@ -1,32 +1,38 @@
-<h3>Verify Your Attendance</h3>
+<h3 ng-if="verifystatus === undefined">Verify Your Attendance</h3>
 <p class="text-center" ng-if="loading"><span class="glyphicon glyphicon-refresh gly-spin"></span> Loading Event...</p>
 
-<div ng-if="event !== undefined">
-  <h4>{{ event.name }}</h4>
-  <p>Location: {{ event.location }}</p>
-  <p>{{ event.date }} from {{ event.start }} to {{ event.end }}</p>
-  <p>Organized by {{ event.organizer }}</p>
+<div class="panel panel-primary" ng-if="event !== undefined && verifystatus === undefined">
+  <div class="panel-heading">{{ event.name }}</div>
+  <div class="panel-body">
+    <p>{{ event.date }} from {{ event.start }} to {{ event.end }}</p>
+    <p><span class="glyphicon glyphicon-map-marker"></span> {{ event.location }}</p>
+    <p>Organized by {{ event.organizer }}</p>
+    <p>Deposit: {{ event.deposit.toFixed(2) }} EUR</p>
+  </div>
 </div>
 
-<div class="col-md-12 text-center" ng-show="verifystatus === undefined && !loading">
+<div class="col-md-12 text-center" ng-show="verifystatus === undefined && !loading && !verifying">
     <ng-webcam config="vm.config"
     on-error="vm.onError(err)"
     on-live="vm.onLive()"
     on-capture-complete="vm.onCaptureComplete(src)"></ng-webcam>
     <button class="btn btn-primary" type="button" ng-hide="!vm.captureButtonEnable" ng-click="vm.capture()">It's Me!</button>
 </div>
-<div class="jumbotron" ng-show="verifystatus === 'verified'">
+<p class="text-center" ng-if="verifying"><span class="glyphicon glyphicon-refresh gly-spin"></span> Verifying...</p>
+<div class="text-center" ng-show="verifystatus === 'verified'">
     <h1>Awesome!</h1>
-    <p class="lead">
-        Your Attendance was successfully verified and the deposit transferred back to your account.
-    </p>
-    <p><a class="btn btn-lg btn-success" ng-click="startAgain()">Perform Another Verification</a></p>
+    <div class="alert alert-success">
+      <p class="lead">
+          Your Attendance was successfully verified and the deposit transferred back to your account.
+      </p>
+    </div>
+    <p><a class="btn btn-success" ng-click="startAgain()">Perform Another Verification</a></p>
 </div>
-<div class="jumbotron" ng-show="verifystatus === 'failed'">
-    <h1>Oops, that went wrong</h1>
+<div class="text-center" ng-show="verifystatus === 'failed'">
+    <h1>Oops, that went wrong...</h1>
     <p class="alert alert-danger">
-        Your Attendance was not verified, please make sure your face and location are correct.
+        Your attendance was not verified, did you use the correct face?
     </p>
-    <p><a class="btn btn-lg btn-danger" ng-click="startAgain()">Try Again</a></p>
+    <p><a class="btn btn-danger" ng-click="startAgain()">Try Again</a></p>
 </div>
 </div>

@@ -1,5 +1,8 @@
-<h3>Sign up with your picture and account data</h3>
-
+<h3>Sign up with your name and picture</h3>
+{{ signupstatus }}
+<div class="alert alert-success" ng-if="signupstatus === 'success'">
+<p>You successfully signed up! <a href="#/register" class="alert-link">Register for Events</a> now.</p>
+</div>
 <div class="col-md-6" ng-show="mode === 'newpicture'">
     <h4>Take New Picture</h4>
     <ng-webcam config="vm.config"
@@ -10,27 +13,25 @@
     <button class="btn btn-default" type="button" ng-click="cancelNewPicture()">Cancel</button>
     <button class="btn btn-primary" type="button" ng-hide="!vm.captureButtonEnable" ng-click="vm.capture()">3-2-1 Shoot!</button>
 </div>
-<div class="col-md-6" ng-show="mode === 'currentpicture'">
-    <h4>Your Picture</h4>
+<div class="col-md-12" ng-show="mode === 'currentpicture'">
+  <form name="signupform">
+    <div class="form-group">
+      <label for="userid">User Name *</label>
+      <input type="text" class="form-control" id="userid" name="userid" ng-model="userid" required maxlength="100">
+    </div>
     <div ng-if="picture === undefined" class="alert alert-warning">
-        <p>You do not yet have a picture!</p>
-        <p>Please make sure to enable your camera and click on "Take Picture"</p>
+      <p>You do not yet have a picture!</p>
+      <p>Please make sure to enable your camera and click on "Take Picture"</p>
     </div>
     <img ng-show="picture !== undefined" ng-src="{{picture}}">
-    <button class="btn btn-primary" type="button" ng-click="takeNewPicture()">Take Picture</button>
+    <p></p>
+    <button class="btn btn-primary" type="button" ng-click="takeNewPicture()" ng-if="picture === undefined">Take Picture</button>
+    <button class="btn btn-primary" type="submit" ng-click="signUp()" ng-hide="picture === undefined || signupform.$invalid || saving">
+      SignUp
+    </button>
+  </form>
 </div>
 
 <div class="col-md-6">
-    <h4>Your Data</h4>
-    <form>
-        <div class="form-group">
-            <label for="userid">User Id</label>
-            <input type="text" class="form-control" id="userid" name="userid" ng-model="userid">
-        </div>
-        <div class="form-group">
-            <label for="accountid">Postbank Account Number</label>
-            <input type="text" class="form-control" id="accountid" name="accountid" ng-model="accountid">
-        </div>
-    </form>
 </div>
 </div>

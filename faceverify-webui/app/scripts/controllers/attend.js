@@ -28,10 +28,27 @@ angular.module('faceverifyApp')
     $scope.vm.captureButtonEnable = false;
 
     $scope.vm.onCaptureComplete = function(src) {
-      $scope.picture = src[0];
+      $scope.picture = src[0].replace(/^data:image\/[a-z]+;base64,/, '');
+      $log.log($scope.picture);
       $scope.vm.off();
-      // TODO add verification call here
-      $scope.verifystatus = 'verified';
+      $scope.verifying = true;
+      var verifyData = {
+        image: $scope.picture
+      };
+
+      $http.post(ConfigService.apihost + '/events/' + $scope.eventid + '/verify', verifyData)
+          .then(function (response) {
+            if (response.data === 'true') {
+              $scope.verifystatus = 'verified';
+            } else {
+              $scope.verifystatus = 'failed';
+            }
+            $scope.verifying = false;
+          }, function (response) {
+            $log.log(response);
+            $scope.verifystatus = 'failed';
+            $scope.verifying = false;
+          });
     };
 
     $scope.vm.onError = function() {

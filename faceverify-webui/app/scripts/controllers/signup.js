@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('faceverifyApp')
-  .controller('SignupCtrl', ['$rootScope', '$scope', '$log', function ($rootScope, $scope, $log) {
+  .controller('SignupCtrl', ['$rootScope', '$scope', '$log', '$http', 'ConfigService', function ($rootScope, $scope, $log, $http, ConfigService) {
     $rootScope.active = 'signup';
     $scope.mode = 'currentpicture';
 
@@ -58,6 +58,22 @@ angular.module('faceverifyApp')
     $scope.cancelNewPicture = function () {
         $scope.vm.off();
         $scope.mode = 'currentpicture';
+    };
+
+    $scope.signUp = function () {
+      $scope.saving = true;
+      var postData = {
+        image: $scope.picture.replace(/^data:image\/[a-z]+;base64,/, '')
+      };
+
+      $http.post(ConfigService.apihost + '/users', postData)
+        .then(function () {
+          $scope.signupstatus = 'success';
+          $scope.saving = false;
+        }, function (response) {
+          $log.log(response);
+          $scope.saving = false;
+        });
     };
 
   }]);

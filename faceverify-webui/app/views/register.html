@@ -1,41 +1,25 @@
 <h3>Register for Events</h3>
 <p class="text-center" ng-if="loading"><span class="glyphicon glyphicon-refresh gly-spin"></span> Loading Events...</p>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <td>Date</td>
-      <td>Start</td>
-      <td>End</td>
-      <td>Name</td>
-      <td>Location</td>
-      <td>Organizer</td>
-      <td>Deposit</td>
-      <td>Status</td>
-      <td></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="event in events">
-      <td>{{ event.date }}</td>
-      <td>{{ event.start }}</td>
-      <td>{{ event.end }}</td>
-      <td>{{ event.name }}</td>
-      <td>{{ event.location }}</td>
-      <td>{{ event.organizer }}</td>
-      <td>{{ event.deposit.toFixed(2) }} EUR</td>
-      <td>
+<div ng-repeat="event in events" class="col-md-6">
+  <div class="panel panel-primary">
+    <div class="panel-heading" style="min-height: 60px;">{{ event.name }}</div>
+    <div class="panel-body" style="min-height: 200px;">
+      <p>{{ event.date }} from {{ event.start }} to {{ event.end }}</p>
+      <p><span class="glyphicon glyphicon-map-marker"></span> {{ event.location }}</p>
+      <p>Organized by {{ event.organizer }}</p>
+      <p>Deposit: {{ event.deposit.toFixed(2) }} EUR</p>
+      <p>
         <span class="text-success" ng-if="event.registered"><span class="glyphicon glyphicon-ok"></span> Going</span>
         <span class="text-warning" ng-if="!event.registered"><span class="glyphicon glyphicon-remove"></span> Not going</span>
-      </td>
-      <td>
-        {{ event.saving }}
-        <button ng-show="event.registered" class="btn btn-sm btn-warning" type="button" ng-click="calloff(event)" ng-disabled="saving">
-          Cancel
-        </button>
-        <button ng-show="!event.registered" class="btn btn-sm btn-primary" type="button" ng-click="register(event)" ng-disabled="saving">
-          Book
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+      </p>
+    </div>
+    <div class="panel-footer">
+      <button ng-show="event.registered" class="btn btn-sm btn-default" type="button" ng-click="calloff(event)" ng-disabled="saving">
+        <span class="glyphicon glyphicon-refresh gly-spin" ng-if="event.saving"></span> Cancel
+      </button>
+      <button ng-show="!event.registered" class="btn btn-sm btn-primary" type="button" ng-click="register(event)" ng-disabled="saving">
+        <span class="glyphicon glyphicon-refresh gly-spin" ng-if="event.saving"></span> Book
+      </button>
+    </div>
+  </div>
+</div>
