@@ -85,11 +85,12 @@ def verify_participation():
 
 @app.route('/users', methods=['POST', 'OPTIONS'])
 def register_user():
+  if request.method == 'OPTIONS':
+    resp = Response("")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
   img_src = extract_base64_encoded_image(request)
   add_participant(img_src)
-  resp = Response("")
-  resp.headers['Access-Control-Allow-Origin'] = '*'
-  return resp
 
 if __name__ == "__main__":
   app.run()
