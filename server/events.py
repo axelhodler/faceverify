@@ -1,7 +1,9 @@
 from flask import Flask, request, Response
+from postbank import refund_deposit, deposit_payment
 import requests
 import json
 import os
+
 app = Flask(__name__)
 
 # Yaas secret
@@ -49,6 +51,7 @@ def book_event(eventId):
           }
   data = '{"registered": true}'
   resp = Response(requests.put(EVENTS_URL + '/' + eventId + '?patch=true', headers=headers, data=data).text)
+  deposit_payment()
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
 
