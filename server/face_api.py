@@ -19,4 +19,4 @@ def participants_match(image_participant_a, image_participant_b):
   write_to_image(image_participant_a, img_src_a)
   write_to_image(image_participant_b, img_src_b)
   verification = CF.face.verify(fetch_faceid(img_src_a), fetch_faceid(img_src_b))
-  return str(verification['isIdentical']) + ':' + verification['confidence']
+  return verification['isIdentical']
