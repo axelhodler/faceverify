@@ -9,18 +9,14 @@ def fetch_faceid(image_url):
     result = CF.face.detect(image_url)
     return result[0]['faceId']
 
-img_url = 'https://avatars2.githubusercontent.com/u/1504952?v=3&s=460'
-face1 = fetch_faceid(img_url)
-
-IMG_ON_FS='userimage.png'
-
-def write_to_image(text):
-  with open(IMG_ON_FS, "wb") as fh:
+def write_to_image(text, filename):
+  with open(filename, "wb") as fh:
     fh.write(base64.decodestring(text))
 
-file = open('base64imgtext', 'r')
-write_to_image(file.read())
-
-result = CF.face.verify(face1, fetch_faceid(IMG_ON_FS))
-print result
-
+def participants_match(image_participant_a, image_participant_b):
+  img_src_a = 'participant_a.png'
+  img_src_b = 'participant_b.png'
+  write_to_image(image_participant_a, img_src_a)
+  write_to_image(image_participant_b, img_src_b)
+  verification = CF.face.verify(fetch_faceid(img_src_a), fetch_faceid(img_src_b))
+  return str(verification['isIdentical']) + ':' + verification['confidence']

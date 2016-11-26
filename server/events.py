@@ -1,5 +1,7 @@
 from flask import Flask, request, Response
 from postbank import refund_deposit, deposit_payment
+from face_api import participants_match
+from participants import add_participant, fetch_participant
 import requests
 import json
 import os
@@ -19,7 +21,7 @@ def get_yaas_token():
   parameters = 'grant_type=client_credentials&client_id=dyST3bvNfU2MWakywYTXDXitZy7gW0HQ&client_secret=' + YAAS_SECRET + '&scope=hybris.document_view hybris.document_manage'
   r = requests.post(tokenurl, headers=headers, data=parameters)
   return json.loads(r.text)['access_token']
-  
+
 @app.route('/events', methods=['GET'])
 def get_events():
   apitoken = get_yaas_token()
@@ -30,7 +32,7 @@ def get_events():
   resp = Response(requests.get(EVENTS_URL, headers=headers).text)
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
-  
+
 @app.route('/events/<eventId>', methods=['GET'])
 def get_event(eventId):
   apitoken = get_yaas_token()
@@ -41,7 +43,7 @@ def get_event(eventId):
   resp = Response(requests.get(EVENTS_URL + '/' + eventId, headers=headers).text)
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
-  
+
 @app.route('/events/<eventId>/book', methods=['POST', 'OPTIONS'])
 def book_event(eventId):
   apitoken = get_yaas_token()
@@ -66,7 +68,28 @@ def cancel_event(eventId):
   resp = Response(requests.put(EVENTS_URL + '/' + eventId + '?patch=true', headers=headers, data=data).text)
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
-  
-  
+
+def extract_base64_encoded_image(request):
+  return str(json.loads(request.data)['image'])
+
+@app.route('/events/<eventId>/verify', methods=['POST', 'OPTIONS'])
+def verify_participation():
+  img_src = extract_base64_encoded_image(request)
+  participants_match = participants_match(img_src, fetch_participant())
+  resp = Response(False)
+  if participants_match:
+    refund_deposit()
+    resp = Response(True)
+  resp.headers['Access-Control-Allow-Origin'] = '*'
+  return resp
+
+@app.route('/users', methods=['POST', 'OPTIONS'])
+def register_user():
+  img_src = extract_base64_encoded_image(request)
+  add_participant(img_src)
+  resp = Response("")
+  resp.headers['Access-Control-Allow-Origin'] = '*'
+  return resp
+
 if __name__ == "__main__":
-  app.run()  
+  app.run()
