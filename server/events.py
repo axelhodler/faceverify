@@ -88,10 +88,11 @@ def register_user():
   if request.method == 'OPTIONS':
     resp = Response("")
     resp.headers['Access-Control-Allow-Origin'] = '*'
-    resp.headers['Access-Control-Allow-Headers'] = '*'
+    resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
     return resp
   img_src = extract_base64_encoded_image(request)
   add_participant(img_src)
+  return ""
 
 if __name__ == "__main__":
   app.run()
