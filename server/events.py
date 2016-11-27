@@ -51,6 +51,9 @@ def get_event(eventId):
 
 @app.route('/events/<eventId>/book', methods=['POST', 'OPTIONS'])
 def book_event(eventId):
+  resp = Response("")
+  if request.method == 'OPTIONS':
+    return add_preflight_headers(resp)
   apitoken = get_yaas_token()
   headers = {
           'Content-Type': 'application/json',
@@ -62,8 +65,7 @@ def book_event(eventId):
     print 'satoshipay'
   else:
     deposit_payment(extract_username(request), extract_password(request))
-  resp.headers['Access-Control-Allow-Origin'] = '*'
-  return resp
+  return add_preflight_headers(resp)
 
 @app.route('/events/<eventId>/cancel', methods=['POST', 'OPTIONS'])
 def cancel_event(eventId):
