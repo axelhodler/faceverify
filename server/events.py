@@ -58,7 +58,10 @@ def book_event(eventId):
           }
   data = '{"registered": true}'
   resp = Response(requests.put(EVENTS_URL + '/' + eventId + '?patch=true', headers=headers, data=data).text)
-  deposit_payment()
+  if request.data == '':
+    print 'satoshipay'
+  else:
+    deposit_payment(extract_username(request), extract_password(request))
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
 
@@ -75,8 +78,17 @@ def cancel_event(eventId):
   resp.headers['Access-Control-Allow-Origin'] = '*'
   return resp
 
+def extract(request, key):
+  return str(json.loads(request.data)[key])
+
+def extract_password(request):
+  return extract(request, 'password')
+
+def extract_username(request):
+  return extract(request, 'username')
+
 def extract_base64_encoded_image(request):
-  return str(json.loads(request.data)['image'])
+  return extract(request, 'image')
 
 @app.route('/events/<eventId>/verify', methods=['POST', 'OPTIONS'])
 def verify_participation(eventId):
