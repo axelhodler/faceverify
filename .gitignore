@@ -1,3 +1,4 @@
 *.png
+!certiface-logo.png
 *.pyc
 .DS_Store
