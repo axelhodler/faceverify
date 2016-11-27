@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import time
 
 API_KEY=os.environ['POSTBANK_API_KEY']
 USERNAME=os.environ['POSTBANK_USERNAME']
@@ -8,6 +9,9 @@ PASSWORD=os.environ['POSTBANK_PASSWORD']
 USERNAME_ORGA=os.environ['POSTBANK_ORGA_USERNAME']
 
 COST=str(10)
+
+def current_time_millis():
+  return str(int(round(time.time() * 1000)))
 
 def get_token(username):
   headers= {
@@ -38,7 +42,7 @@ def deposit_payment():
     "x-auth": get_token(USERNAME),
     "Content-Type":"application/json"
   }
-  data='{"authorizationDevice": {"identifier": "668357","method": "bestSign","numberOfFailedAttempts": 0,"authorizationState": "SELECTED", "preferred": false, "aliasName": "HackathonNov01_8" }, "state": null, "creditTransfer": { "amount": ' + COST + ', "recipient": { "iban": "DE18100100100005616140", "paymentName": "Mariu Freudeafdd", "accountHolder": "Mariu Freudeafdd" }, "sender": { "iban": "DE44100100100005571149", "paymentName": "Mario Liebeafdk", "accountHolder": "Mario Liebeafd" }, "bookingDate": 1480175147919 }}'
+  data='{"authorizationDevice": {"identifier": "668357","method": "bestSign","numberOfFailedAttempts": 0,"authorizationState": "SELECTED", "preferred": false, "aliasName": "HackathonNov01_8" }, "state": null, "creditTransfer": { "amount": ' + COST + ', "recipient": { "iban": "DE18100100100005616140", "paymentName": "Mariu Freudeafdd", "accountHolder": "Mariu Freudeafdd" }, "sender": { "iban": "DE44100100100005571149", "paymentName": "Mario Liebeafdk", "accountHolder": "Mario Liebeafd" }, "bookingDate": ' + current_time_millis() + ' }}'
   r = requests.post('https://hackathon.postbank.de:443/bank-api/gold/postbankid/credittransfer', headers=headers, data=data)
   finalizing_url = extract_finalize_url(r.text)
   finalize_deposit_payment(finalizing_url, USERNAME)
@@ -50,7 +54,7 @@ def refund_deposit():
     "x-auth": get_token(USERNAME_ORGA),
     "Content-Type":"application/json"
   }
-  data='{"authorizationDevice": {"identifier": "668416","method": "bestSign","numberOfFailedAttempts": 0,"authorizationState": "SELECTED","preferred": false,"aliasName": "HackathonNov03_1"},"state": null,"creditTransfer": {"amount": ' + COST + ',"recipient": {"iban": "DE44100100100005571149","paymentName": "Mario Liebeafdk","accountHolder": "Mario Liebeafdk"},"sender": {"iban": "DE18100100100005616140","paymentName": "Mariu Freudeafdd","accountHolder": "Mariu Freudeafdd"},"bookingDate": 1480175147919}}'
+  data='{"authorizationDevice": {"identifier": "668416","method": "bestSign","numberOfFailedAttempts": 0,"authorizationState": "SELECTED","preferred": false,"aliasName": "HackathonNov03_1"},"state": null,"creditTransfer": {"amount": ' + COST + ',"recipient": {"iban": "DE44100100100005571149","paymentName": "Mario Liebeafdk","accountHolder": "Mario Liebeafdk"},"sender": {"iban": "DE18100100100005616140","paymentName": "Mariu Freudeafdd","accountHolder": "Mariu Freudeafdd"},"bookingDate": ' + current_time_millis() + '}}'
 
   r = requests.post('https://hackathon.postbank.de:443/bank-api/gold/postbankid/credittransfer', headers=headers, data=data)
   finalizing_url = extract_finalize_url(r.text)
