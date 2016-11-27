@@ -39,6 +39,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "install": "bower install",
     "test": "karma start test/karma.conf.js"
   }
 }
