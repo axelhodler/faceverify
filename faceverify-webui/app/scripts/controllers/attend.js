@@ -18,9 +18,7 @@ angular.module('faceverifyApp')
 
     $scope.vm = {};
     $scope.vm.config = {
-      delay: 2,
       shots: 1,
-      countdown: 3,
       flashFallbackUrl: 'vendors/webcamjs/webcam.swf',
       flashNotDetectedText: 'Your browser has no flash plugin installed!'
     };

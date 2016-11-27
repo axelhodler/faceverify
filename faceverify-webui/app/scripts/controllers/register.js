@@ -4,6 +4,8 @@ angular.module('faceverifyApp')
   .controller('RegisterCtrl', ['$rootScope', '$scope', '$http', '$log', '$timeout', 'ConfigService', function ($rootScope, $scope, $http, $log, $timeout, ConfigService) {
     $rootScope.active = 'register';
     $scope.loading = true;
+    $scope.username = 'HackathonNov01_5';
+    $scope.password = 'hat1116';
 
     $http.get(ConfigService.apihost + '/events').then(function (response) {
       $scope.loading = false;
@@ -11,6 +13,7 @@ angular.module('faceverifyApp')
       response.data.forEach(function (event) {
         $scope.events.push(event);
       });
+      /*
       $timeout(function () {
         Array.prototype.forEach.call(document.getElementsByClassName('satoshi'), function (element, index) {
           var satoshiElement = angular.copy(document.getElementById('satoshipay' + index));
@@ -19,7 +22,7 @@ angular.module('faceverifyApp')
             $scope.events[index].satoshi = satoshiElement;
           }
         });
-      }, 0);
+      }, 0); */
     }, function (response) {
       $log.log(response);
       $scope.loading = false;
@@ -37,8 +40,9 @@ angular.module('faceverifyApp')
         };
         $http.post(ConfigService.apihost + '/events/' + $scope.registering.id + '/book', userData)
           .then(function () {
-            event.registered = true;
+            $scope.registering.registered = true;
             $scope.saving = false;
+            delete $scope.registering;
             angular.element('#postbank').modal('hide');
           }, function (response) {
             $log.log(response);

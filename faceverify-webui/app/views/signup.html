@@ -11,12 +11,12 @@
     on-live="vm.onLive()"
     on-capture-complete="vm.onCaptureComplete(src)"></ng-webcam>
     <button class="btn btn-default" type="button" ng-click="cancelNewPicture()">Cancel</button>
-    <button class="btn btn-primary" type="button" ng-hide="!vm.captureButtonEnable" ng-click="vm.capture()">3-2-1 Shoot!</button>
+    <button class="btn btn-primary" type="button" ng-hide="!vm.captureButtonEnable" ng-click="vm.capture()">Shoot</button>
 </div>
 <div class="col-md-12" ng-show="mode === 'currentpicture'">
   <form name="signupform">
     <div class="form-group">
-      <label for="userid">User Name *</label>
+      <label for="userid">User Name</label>
       <input type="text" class="form-control" id="userid" name="userid" ng-model="userid" required maxlength="100">
     </div>
     <div ng-if="picture === undefined" class="alert alert-warning">
